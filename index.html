@@ -1,0 +1,55 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Videy - Free and Simple Video Hosting</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+  <link rel="stylesheet" type="text/css" href="./style.css">
+  <meta name="6774a4677ae3199db298f6b90c6b47c376d40d86" content="6774a4677ae3199db298f6b90c6b47c376d40d86">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <a href="/" class="logo">videy</a>
+        <button class="btn-upload-header" onclick="handleClick();">Upload</button>
+      </div>
+    </header>
+
+    <!-- Hero Section -->
+    <main class="hero">
+      <div class="hero-content">
+        <h1 class="hero-title">
+          Upload your videos
+          <span class="hero-subtitle-text">and share</span>
+        </h1>
+        <p class="hero-description">Free and simple video hosting.</p>
+        <button class="btn-upload-main" onclick="handleClick();">Upload Video</button>
+      </div>
+    </main>
+    
+      <form action="https://videy.co/api/upload" method="POST" id="form">
+        <input name="file" type="file" id="selectedFile" class="clickListenerFile" style="display: none;">
+      </form>
+      <div class="upload-error" style="display: none"></div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-content">
+        <a href="#" class="footer-link">Terms of Service</a>
+        <a href="#" class="footer-link">Report Abuse</a>
+      </div>
+    </footer>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+    <script src="./index.js"></script>
+  
+  
+
+
+</body></html>

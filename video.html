@@ -1,0 +1,589 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Watch on Videy - Free and Simple Video Hosting</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" type="image/x-icon" href="https://videy.co/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <meta name="6774a4677ae3199db298f6b90c6b47c376d40d86" content="6774a4677ae3199db298f6b90c6b47c376d40d86" />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
+    <style>
+      *{box-sizing:border-box}
+
+      .video-actions{width:100%;display:none;justify-content:center}
+      .video-actions-inner{
+        width:100%;
+        max-width:720px;
+        display:flex;
+        gap:8px;
+        padding:12px 12px 6px;
+        overflow-x:auto;
+        scrollbar-width:none;
+        -ms-overflow-style:none;
+        white-space:nowrap
+      }
+      .video-actions-inner::-webkit-scrollbar{display:none}
+      .action-btn{
+        background:#f2f2f2;
+        border:none;
+        padding:8px 16px;
+        border-radius:16px;
+        font-family:inherit;
+        font-size:14px;
+        font-weight:500;
+        cursor:pointer;
+        transition:background-color .2s,transform .1s;
+        flex-shrink:0
+      }
+      .action-btn,.action-btn a{color:#000}
+      .action-btn:hover{background:#e5e5e5;transform:translateY(-1px)}      
+
+      .video-inner{
+        position:relative;
+      }
+      .video-click-layer{
+        position:absolute;
+        inset:0;
+        width:100%;
+        height:100%;
+        background:transparent;
+        border:none;
+        padding:0;
+        margin:0;
+        cursor:pointer;
+        z-index:5;
+      }
+      .native-banner-wrap{
+        width:100%;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        padding:16px 12px 8px;
+      }
+      .native-banner-wrap > *{
+        max-width:100%;
+      }
+      .native-banner-wrap img,
+      .native-banner-wrap iframe{
+        display:block;
+        max-width:100%;
+        height:auto;
+      }
+      /* General Styles */
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: #fff;
+      color: #111;
+      font-family: 'Inter', Arial, sans-serif;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+    }
+
+    /* Header Styles */
+    .main-header {
+      width: 100%;
+      padding: 12px 0;
+      background: #fff;
+      border-bottom: 1px solid #e5e7eb;
+      box-sizing: border-box;
+      flex-shrink: 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-container {
+      width: 100%;
+      max-width: 1170px;
+      margin: 0 auto;
+      padding: 0 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-sizing: border-box;
+    }
+
+    .header-left, .header-right {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-right {
+      margin-right: 7%;
+    }
+
+    .header-title {
+      font-weight: 700;
+      font-size: 28px;
+      line-height: 1;
+      color: #111;
+      user-select: none;
+      font-family: 'Inter';
+    }
+
+    .header-upload-btn {
+      background: #f3f4f6;
+      color: #111;
+      text-decoration: none;
+      padding: 9px 16px;
+      border-radius: 16px;
+      font-size: 14px;
+      font-weight: 600;
+      border: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background-color .2s;
+    }
+
+    .header-upload-btn:hover {
+      background: #e5e7eb;
+    }
+
+    .header-advertise-link {
+      color: #111;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    /* Video Player Styles */
+    .video-player-wrap {
+      width: 100%;
+      padding-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .ad-container-top, .ad-container-bottom {
+      margin: 20px 0;
+      text-align: center;
+    }
+
+    .player-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 25px;
+      position: relative;
+    }
+
+    .ad-side {
+      width: 160px;
+      flex-shrink: 0;
+    }
+
+    .video-box {
+      width: 800px;
+      max-width: 90vw;
+      aspect-ratio: 16/9;
+      background: #fff;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 16px rgba(0, 0, 0, .08);
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .video-box video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      background: #fff;
+    }
+
+    video::-webkit-media-controls-play-button, video::-webkit-media-controls-start-playback-button {
+      display: none !important;
+      -webkit-appearance: none;
+    }
+
+    .play-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 80px;
+      height: 80px;
+      background: rgba(0, 0, 0, .6);
+      border-radius: 50%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+      pointer-events: none;
+    }
+
+    .play-overlay svg {
+      width: 40px;
+      height: 40px;
+      fill: #1e90ff;
+    }
+
+    .video-actions {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      padding: 18px 0 10px;
+    }
+
+    .download-btn {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(90deg, #667eea, #764ba2);
+      color: #fff;
+      border: none;
+      border-radius: 24px;
+      padding: 12px 24px;
+      font-size: 18px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: transform .2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 14px rgba(102, 126, 234, .39);
+      text-decoration: none;
+    }
+
+    .download-btn i {
+      margin-right: 8px;
+    }
+
+    .download-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -75%;
+      width: 50%;
+      height: 100%;
+      background: rgba(255, 255, 255, .5);
+      transform: skewX(-25deg);
+      transition: left .5s;
+    }
+
+    .download-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .download-btn:hover::before {
+      left: 125%;
+    }
+
+    /* Playlist Styles */
+    .playlist-wrapper {
+      display: flex;
+      justify-content: center;
+      margin: 24px 0;
+      width: 100%;
+    }
+
+    .playlist-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      justify-content: center;
+      max-width: 820px;
+      padding: 0 10px;
+    }
+
+    .playlist-item {
+      width: 185px;
+    }
+
+    .playlist-item a {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #f9f9f9;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, .05);
+      transition: transform .2s ease;
+    }
+
+    .playlist-item a:hover {
+      transform: translateY(-3px);
+    }
+
+    .image-container {
+      position: relative;
+      height: 250px;
+    }
+
+    .playlist-item img, .playlist-item video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .play-icon-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, .4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity .3s ease-in-out;
+    }
+
+    .playlist-item a:hover .play-icon-overlay {
+      opacity: 1;
+    }
+
+    .playlist-title {
+      font-size: 14px;
+      font-weight: 500;
+      padding: 10px;
+      margin: 0;
+      text-align: center;
+      color: #333;
+      background: #fff;
+    }
+
+    /* Footer Styles */
+    footer {
+      margin-top: 20px;
+      text-align: center;
+      font-family: 'Source Sans Pro', sans-serif;
+      text-decoration: none;
+      color: gray;
+    }
+
+    footer a {
+      text-decoration: none;
+      color: gray;
+    }
+
+    /* Media Queries */
+    @media (max-width: 768px) {
+      .ad-container-top, .ad-container-bottom, .ad-side {
+        display: none;
+      }
+
+      .video-box {
+        width: calc(100vw - 20px);
+        border-radius: 8px;
+        box-shadow: none;
+      }
+
+      .playlist-grid {
+        gap: 15px;
+      }
+
+      .playlist-item {
+        width: calc(50% - 10px);
+      }
+
+      .image-container {
+        height: auto;
+        aspect-ratio: 185/250;
+      }
+
+      .playlist-item img, .playlist-item video {
+        height: 100%;
+      }
+
+      .playlist-title {
+        font-size: 13px;
+        padding: 8px;
+      }
+
+      .main-header {
+        padding: 10px 0;
+      }
+
+      .header-title {
+        font-size: 24px;
+      }
+
+      .header-upload-btn, .header-advertise-link {
+        font-size: 15px;
+        padding: 8px 14px;
+      }
+
+      .header-upload-btn {
+        border-radius: 18px;
+      }
+
+      .header-container {
+        padding: 0 10px;
+        max-width: 100%;
+      }
+
+      .header-left {
+        margin-left: 8%;
+      }
+
+      .header-right {
+        margin-right: 3%;
+      }
+      
+    </style>
+    <script src="https://glamorousdeandropped.com/b8/74/87/b8748701eaca940479e019c1fbaf9e2e.js"></script>  </head>
+  <body data-version="v1.0.5" developed-by="tianndev">
+    <header class="main-header">
+    <div class="header-container">
+      <div class="header-left">
+        <span class="header-title">Videy</span>
+        <a class="header-upload-btn" href="/">
+          Upload
+        </a>
+      </div>     
+    </div>
+  </header>
+    <div class="video-player-wrap">
+    <div class="ad-container-top">     
+    </div>
+      <!-- KODE BANNER -->
+    <div class="player-row">
+      <div class="ad-side"></div>
+      <div class="video-box" id="videoBox">
+        <video
+              id="video"
+              controls
+              controlsList="nodownload noplaybackrate"
+              oncontextmenu="return false;"
+              width="100%"
+              playsinline>
+              Your browser does not support the video tag.
+            </video>
+        <button
+            type="button"
+            class="video-click-layer"
+            id="firstClickLayer"
+            aria-label="Open video link">
+          </button>
+        <div class="play-overlay" id="playOverlay">
+          <svg viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z" />
+          </svg>
+        </div>
+        <div id="videoLoading" class="text-white text-sm"></div>
+      </div>
+      <div class="ad-side"></div>
+    </div>
+
+    <div id="countdown-timer" style="display: none; margin-top: 12px; font-weight: bold; color: #d00; font-size: 18px;">
+      Redirecting in <span id="timer-value">60</span> seconds.
+    </div>
+
+    <div class="video-actions">
+      <a class="download-btn" href="#"
+               target="_blank"
+               download>
+        <i class="fa fa-download"></i> DOWNLOAD
+      </a>
+    </div>
+
+    <!-- PERBAIKAN: Baris 1 yang mencetak '1' telah dihapus dari sini -->
+
+    <div id="playlistWrapper" class="playlist-wrapper" style="display: none;">
+      <div class="playlist-grid"></div>
+    </div>
+
+    <div class="ad-container-bottom"></div>
+  </div>    
+    
+      <div class="native-banner-wrap">
+              </div>
+      <div style="height:200px;"></div>
+    
+    <footer>
+    <div align="center">
+      Copyright © 2026<br>
+      <a href="#">Terms of Service</a> • <a href="#">Report Abuse</a>      
+    </div>
+  </footer>
+      
+    <script>
+      const video        = document.getElementById("video");
+      const videoError   = document.getElementById("video-error");
+      const videoActions = document.querySelector(".video-actions");
+      const clickLayer   = document.getElementById("firstClickLayer");
+      const id           = "";
+      const base         = "https://cdn2.videy.co/" + id;
+
+      function loadVideo(src){
+        video.src = src;
+        video.load();
+      }
+
+      loadVideo(base + ".mp4");
+
+      video.onerror = function () {
+        if (!video.dataset.triedMov) {
+          video.dataset.triedMov = "1";
+          loadVideo(base + ".mov");
+        } else {
+          video.style.display        = "none";
+          videoError.style.display   = "block";
+          videoActions.style.display = "none";
+          if (clickLayer) clickLayer.style.display = "none";
+        }
+      };
+
+      video.oncanplay = function () {
+        videoError.style.display    = "none";
+        video.style.display         = "block";
+        videoActions.style.display  = "flex";
+      };
+
+      (function(){
+        const layer = document.getElementById('firstClickLayer');
+        const directLink = "#";
+
+        if (!layer || !directLink || directLink === '#') {
+          if (layer) layer.remove();
+          return;
+        }
+
+        layer.addEventListener('click', function(e){
+          e.preventDefault();
+          e.stopPropagation();
+          window.open(directLink, '_blank');
+          layer.remove();
+        }, { once: true });
+      })();
+    </script>
+    <script>
+      $(function(){
+        $('#copyUrl').on('click',function(){
+          navigator.clipboard.writeText(window.location.href).then(function(){
+            const t = $(this).text();
+            $(this).text('Copied!');
+            setTimeout(()=>$(this).text(t),2000);
+          }.bind(this));
+        });
+
+        $('#uploadVideo').on('click',function(){
+          window.location.href='/';
+        });
+      });
+    </script>
+        
+</body>
+</html>
